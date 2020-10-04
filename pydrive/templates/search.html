@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+{% extends 'basesearch.html' %}
+   {% block content %}
+<div class="container">
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">WebSiteName</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="#">Home</a></li>
+      
+    </ul>
+  </div>
+</nav>
+<div class="main">
+  
+ 
+  
+  <!-- Another variation with a button -->
+
+  <div class="input-group">
+  <form  method="POST" action="{% url 'search' %}" >
+    <input type="text" class="form-control" name="q" id="search" placeholder="Search a file" ">
+    {% csrf_token %}
+    
+      <button class="btn btn-secondary" type="submit">
+        <i class="fa fa-search"></i>
+      </button>
+    
+</form>
+  </div> 
+  <div class="container">
+   <div class="row justify-content-center" id="-container">
+                        <div class="col-md-12">
+                        <table class="table table-hover">
+                          <thead class="font-weight-bold">
+                            <tr>
+                              <th scope="col" class="font-weight-bold">#</th>
+                              <th scope="col" class="font-weight-bold">Name</th>
+                              <th scope="col" class="font-weight-bold">Title</th>
+                              <th scope="col" class="font-weight-bold">URL</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <thead class="">
+                            {% for value in userdata %}
+
+                            <tr>
+                              <th scope="col" class="font-weight">#</th>
+                              <th scope="col" class="font-weight">{{value.user_name}}</th>
+                              <th scope="col" class="font-weight">{{value.user_keyword}}</th>
+                              <th scope="col" class="font-weight">{{value.user_url}}</th>
+                            </tr>
+                            {% endfor %}
+                          </thead>
+                          </tbody>
+                        </table>
+                    </div>
+                </div>
+  </div>
+  <div class="content">
+            <div class="container-fluid">
+                <div class="card text-center">
+                    <div><h5 class="card-title p-3 notch bg-gradient text-white text-center mt-0" style="width: fit-content"><b>Files Founds</b></h5>  </div>
+                    <div class="row justify-content-center" id="files-container">
+                        <div id="file-card" class="col-md-2 m-2 text-center p-0 rounded border border-default">
+                        </div>
+                </div>
+                </div>
+            </div>
+  <tbody>
+  {% for value in show %}
+    <tr>
+      <td>{{value.file_size}}</td>
+      <td>{{value.file_link}}</td>
+      <td>{{value.user_id}}</td>
+      <td>{{value.id}}</td>
+      <td>{{value.folder_id}}</td>
+      <td>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</div>
+<div>
+    {% endblock content %}
+
+     {% block extra_js %}
+        <script src="{{ js }}/mediaelement.js"></script>
+        <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+        <script src="{{ js }}/file_manager.js"></script>
+        <script src="{{ js }}/sharing_manager.js"></script>
+        {% for v in show %}
+        <script>
+            loadFiles({{ v.user_id }}, "{{ csrf_token }}", '{{ starred }}', {{ folder_id }});
+
+
+        </script>
+         {% endfor %}
+    {% endblock extra_js %}
